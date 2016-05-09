@@ -10,14 +10,13 @@ Timer t;
 int count = 0;
 
 void setup() {
-  Serial.begin(9600);
   // Setup Relay
   pinMode(CH1, OUTPUT);
   pinMode(CH2, OUTPUT);
 
   // Turn off power to relays
-  digitalWrite(CH1, LOW);
-  digitalWrite(CH2, LOW);
+  digitalWrite(CH1, HIGH);
+  digitalWrite(CH2, HIGH);
 
   // Setup Radio Receiver
   vw_set_rx_pin(RX_PIN);
@@ -31,35 +30,33 @@ void setup() {
 }
 
 void parse_instr(uint8_t * buf){
-    if(buf[0]=='U'){
-      digitalWrite(CH1, HIGH);
-      digitalWrite(CH2, LOW);
-    }
-    if(buf[0]=='0'){
-      digitalWrite(CH1, LOW);
-      digitalWrite(CH2, LOW);
-    }
-    if(buf[0]=='D'){
+    if(buf[0]=='U' && buf[1]=='P' && buf[2]=='P'){
       digitalWrite(CH1, LOW);
       digitalWrite(CH2, HIGH);
+    }
+    if(buf[0]=='S' && buf[1]=='T' && buf[2]=='P'){
+      digitalWrite(CH1, HIGH);
+      digitalWrite(CH2, HIGH);
+    }
+    if(buf[0]=='N' && buf[1]=='E' && buf[2]=='R'){
+      digitalWrite(CH1, HIGH);
+      digitalWrite(CH2, LOW);
     }
     count = 0;
 }
 
 void handle_loneliness(){
-  digitalWrite(CH1, LOW);
-  digitalWrite(CH2, LOW);
-  Serial.println("Lonley as fuck");
+  digitalWrite(CH1, HIGH);
+  digitalWrite(CH2, HIGH);
 }
 
-void tick_counter(void *context){s
+void tick_counter(void *context){
   count += 1;
-  Serial.println(count);
 }
 
 void loop() {
   t.update();
-  if(count > 5){
+  if(count > 1){
     handle_loneliness();
     count = 0;
   }
