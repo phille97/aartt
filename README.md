@@ -1,1 +1,1 @@
-# **A**rduino **A**dvanced **R**emote for a **T**ipping **T**railer
+# **A**rduino **R**emote for a **T**ipping **T**railer
